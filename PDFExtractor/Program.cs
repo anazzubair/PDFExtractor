@@ -24,6 +24,7 @@ namespace ConsoleApplication1
         private static string DIRSEPARATOR = "\\";
         private static string PDFEXTENSION = ".pdf";
         private static string OUTEXTENSION = ".txt";
+        private static string ReportHeader = "Mouvements Traités";
 
         static void Main(string[] args)
         {
@@ -104,7 +105,7 @@ namespace ConsoleApplication1
 
         private static void ProcessLine(string line, StreamWriter writer)
         {
-            if (line.Contains("Mouvements Traités"))
+            if (line.Contains(ReportHeader))
             {
                 var pieces = line.Split(new string[] { ":", "*" }, StringSplitOptions.None);
                 employee = pieces[1].Trim();
