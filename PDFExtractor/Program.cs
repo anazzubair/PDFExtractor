@@ -108,7 +108,6 @@ namespace ConsoleApplication1
             {
                 var pieces = line.Split(new string[] { ":", "*" }, StringSplitOptions.None);
                 employee = pieces[1].Trim();
-                //Console.WriteLine(pieces[1].Trim());
                 return;
             }
 
