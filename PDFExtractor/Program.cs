@@ -23,17 +23,24 @@ namespace ConsoleApplication1
         private static string outDirectoryName = "Processed";
         private static string DIRSEPARATOR = "\\";
         private static string PDFEXTENSION = ".pdf";
-        private static string OUTEXTENSION = ".txt";
+        private static string OUTEXTENSION = ".csv";
         private static string ReportHeader = "Mouvements Traités";
+        private static string BEAC = "BEAC";
+        private static string _ = "_";
 
         static void Main(string[] args)
         {
             if (!Directory.Exists(directoryName)) return;
             SetupOutputDirectory();
 
-            foreach (var filePath in Directory.GetFiles(directoryName))
+            var dateSegment = DateTime.Now.ToString().Replace(":", _).Replace(" ", _).Replace("/", _);
+            var outputFileName = BEAC + _ + dateSegment + OUTEXTENSION;
+            using (var outStream = System.IO.File.CreateText(outDirectoryName + DIRSEPARATOR + outputFileName))
             {
-                Processfile(filePath);
+                foreach (var filePath in Directory.GetFiles(directoryName))
+                {
+                    Processfile(filePath, outStream);
+                }
             }
         }
 
@@ -57,16 +64,12 @@ namespace ConsoleApplication1
             }
         }
 
-        private static void Processfile(string filePath)
+        private static void Processfile(string filePath, StreamWriter outStream)
         {
             if (!filePath.ToLower().EndsWith(PDFEXTENSION)) return;
             var document = new org.pdfclown.files.File(filePath).Document;
             var fileName = System.IO.Path.GetFileName(filePath);
-            var outputFileName = fileName.Split(new String[] { PDFEXTENSION, PDFEXTENSION.ToUpper() }, StringSplitOptions.None)[0] + OUTEXTENSION;
-            using (var outStream = System.IO.File.CreateText(outDirectoryName + DIRSEPARATOR + outputFileName))
-            {
-                ProcessDocument(document, outStream);
-            }
+            ProcessDocument(document, outStream);
         }
 
         private static void ProcessDocument(Document document, StreamWriter writer)
